@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Car Rental Tracker</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <h1>Car Rental Tracker</h1>
+
+    <form class="add-car-form">
+      <input type="text" name="name" placeholder="Car name" />
+      <input type="number" name="dailyRate" placeholder="Daily rate" />
+      <button type="submit">Add car</button>
+      <p class="error"></p>
+    </form>
+
+    <ul class="car-list"></ul>
+
+    <script type="module" src="js/controller.js"></script>
+  </body>
+</html>
