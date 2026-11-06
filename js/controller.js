@@ -1,0 +1,22 @@
+import * as model from './model.js';
+import carListView from './views/CarListView.js';
+import addCarView from './views/AddCarView.js';
+
+const controlAddCar = function (name, dailyRate) {
+  if (!name.trim()) return addCarView.renderError('Please enter a car name.');
+  if (!(dailyRate > 0))
+    return addCarView.renderError('Daily rate must be more than 0.');
+
+  addCarView.renderError('');
+  model.addCar(name.trim(), dailyRate);
+  carListView.render(model.state.cars);
+  addCarView.clearForm();
+};
+
+const init = function () {
+  model.loadState();
+  carListView.render(model.state.cars);
+  addCarView.addHandlerAdd(controlAddCar);
+};
+
+init();
