@@ -1,6 +1,7 @@
 import * as model from './model.js';
 import carListView from './views/CarListView.js';
 import addCarView from './views/AddCarView.js';
+import rentalFormView from './views/RentalFormView.js';
 
 const controlAddCar = function (name, dailyRate) {
   if (!name.trim()) return addCarView.renderError('Please enter a car name.');
@@ -13,10 +14,18 @@ const controlAddCar = function (name, dailyRate) {
   addCarView.clearForm();
 };
 
+const controlAddRental = function (rentalData) {
+  const { customerName, carId, startDate, endDate, dailyRate } = rentalData;
+  const rentalDays = model.calculateRentalDays(startDate, endDate);
+  let isValid = true;
+}
+
 const init = function () {
   model.loadState();
   carListView.render(model.state.cars);
+  rentalFormView.render(model.state.cars);
   addCarView.addHandlerAdd(controlAddCar);
+  rentalFormView.addHandlerSubmit(controlAddRental);
 };
 
 init();
