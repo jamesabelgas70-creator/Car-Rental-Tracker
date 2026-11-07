@@ -38,8 +38,13 @@ class RentalFormView {
 
     this._form.reset();
     this._clearErrors();
+    this._clearSuccess();
     this._updateRate();
     this._updateTotal();
+    }
+
+    renderSuccess(message) {
+        this._form.querySelector('.rental-success').textContent = message;
     }
 
     _generateMarkup() {
@@ -70,6 +75,7 @@ class RentalFormView {
                 Total Rental Fee:
                 <output name="total" for="rental-start-date rental-end-date rental-daily-rate">₱0.00</output>
             </p>
+            <p class="rental-success" role="status" aria-live="polite"></p>
             <button type="submit">Save Rental</button>
         </form>`;
     }
@@ -93,6 +99,7 @@ class RentalFormView {
     }
 
     _handleFieldChange(event) {
+        this._clearSuccess();
         if (event.target.name === 'carId') this._updateRate();
         if (event.target.name === 'startDate' || event.target.name === 'endDate') {
             this._form.elements.endDate.min = this._form.elements.startDate.value;
@@ -237,6 +244,10 @@ class RentalFormView {
         ['customerName', 'carId', 'startDate', 'endDate', 'dailyRate'].forEach(fieldName => {
             this._showError(fieldName, '');
         });
+    }
+
+    _clearSuccess() {
+        this._form.querySelector('.rental-success').textContent = '';
     }
 
     _getErrorId(fieldName) {

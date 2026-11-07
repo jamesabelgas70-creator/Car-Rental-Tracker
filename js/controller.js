@@ -16,6 +16,8 @@ const controlAddCar = function (name, dailyRate) {
 
 const controlAddRental = function (rentalData) {
   model.addRental(rentalData);
+  rentalFormView.clearForm();
+  rentalFormView.renderSuccess('Successfully rented!');
 };
 
 const init = function () {
