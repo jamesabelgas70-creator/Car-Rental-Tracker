@@ -244,3 +244,5 @@ class RentalFormView {
         }[fieldName];
     }
 }   
+
+export default new RentalFormView();
