@@ -6,24 +6,27 @@ class RentalFormView {
     _submitHandler;
 
     render(cars = []) {
+        if (!Array.isArray(cars)) {
+            throw new TypeError('Rental form expects cars to be an array.');
+        }
         this._cars = cars;
 
         if (!this._form) {
-            const carList = document.querySelector('.car-list');
-            if(!carList) {
+            const carlist = document.querySelector('.car-list');
+            if(!carlist) {
                 throw new Error('Car list element not found in the DOM.');
             }
 
-            carlist.insertAdjacentHTML('afterend', this._generateFormMarkup());
+            carlist.insertAdjacentHTML('afterend', this._generateMarkup());
             this._form = document.querySelector('.rental-form');
-            this._form.addEventListener('submit', this._handleSubmit.bind(this));
-            this._form.addEventListener('input', this._handleInput.bind(this));
-            this._form.addEventListener('change', this._handleInput.bind(this));
+            this._form.addEventListener('submit', this.handleSubmit.bind(this));
+            this._form.addEventListener('input', this._handleFieldChange.bind(this));
+            this._form.addEventListener('change', this._handleFieldChange.bind(this));
         }
 
-        this.renderCarOptions();
-        this.updateRate();
-        this.updateTotal();
+        this._renderCarOptions();
+        this._updateRate();
+        this._updateTotal();
     }    
 
     addHandlerSubmit(handler) {
@@ -81,35 +84,35 @@ class RentalFormView {
             select.add(option);
         });
 
-        if (this._cars.some(car => car.id === selectedCarId)) {
+        if (this._cars.some(car => String(car.id) === selectedCarId)) {
             select.value = selectedCarId;
-        } else if (this._cars.length > 0) {
-            select.value = this._cars[0].id;
+        } else if (this._cars[0]) {
+            select.value = String(this._cars[0].id);
         }
 
     }
 
     _handleFieldChange(event) {
-        if (event.target.name === 'carId') this._updateRate
+        if (event.target.name === 'carId') this._updateRate();
         if (event.target.name === 'startDate' || event.target.name === 'endDate') {
             this._form.elements.endDate.min = this._form.elements.startDate.value;
         }
 
-        this.updateTotal();
-        if (event.target.name) this.validateField(event.target.name);
+        this._updateTotal();
+        if (event.target.name) this._validateField(event.target.name);
 
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        this._clearErrors
+        this._clearErrors();
 
         const customerName = this._form.elements.customerName.value.trim();
         const carId = this._form.elements.carId.value;
         const startDate = this._form.elements.startDate.value;
         const endDate = this._form.elements.endDate.value;
         const dailyRate = parseFloat(this._form.elements.dailyRate.value);
-        const rentalDays = this._calculateRentalDays(startDate, endDate);
+        const rentalDays = this._getRentalDays(startDate, endDate);
         let isValid = true;
 
         if (!customerName) {
@@ -137,7 +140,7 @@ class RentalFormView {
         }
         if (rentalDays === null) isValid = false;
 
-        this.updateTotal();
+        this._updateTotal();
         if (!isValid) return;
 
         this._submitHandler?.({
@@ -163,9 +166,9 @@ class RentalFormView {
 
         const errors = {
             customerName: !value.customerName ? 'Customer name is required.' : '',
-            carId: !value.carId && this.cars.some(car => car.id === value.carId) ? 'Please select a car.' : '',
+            carId: !value.carId ? 'Please select a car.' : '',
             startDate: !value.startDate ? 'Start date is required.' : '',
-            endDate: !value.endDate ? 'End date is required.' : (value.startDate && this._calculateRentalDays(value.startDate, value.endDate) === null ? 'End date must be after start date.' : ''),
+            endDate: !value.endDate ? 'End date is required.' : (value.startDate && this._getRentalDays(value.startDate, value.endDate) === null ? 'End date must be after start date.' : ''),
             dailyRate: !Number.isFinite(value.dailyRate) || value.dailyRate < 0 ? 'Daily rate must be a non-negative number.' : '',
         };
 
@@ -174,11 +177,11 @@ class RentalFormView {
     }
 
     _updateRate() { 
-        const car = this.cars.find(
-            item => item.id === this._form.elements.carId.value
+        const car = this._cars.find(
+            item => String(item.id) === this._form.elements.carId.value
         );
         this._form.elements.dailyRate.value = car ? car.dailyRate : '';
-        this.validateField('dailyRate');
+        this._validateField('dailyRate');
 
     }
 
@@ -186,18 +189,16 @@ class RentalFormView {
         const startDate = this._form.elements.startDate.value;
         const endDate = this._form.elements.endDate.value;
         const dailyRate = parseFloat(this._form.elements.dailyRate.value);
-        const rentalDays = this._calculateRentalDays(startDate, endDate);
+        const rentalDays = this._getRentalDays(startDate, endDate);
         const totalFee = Number.isFinite(dailyRate) && rentalDays !== null ? dailyRate * rentalDays : 0;
         this._form.querySelector('output[name="total"]').value = `₱${totalFee.toFixed(2)}`;
-
-        totalFee.value = rentalDays !== null ? `₱${totalFee.toFixed(2)}` : '₱0.00';
         
     }
 
     _getRentalDays(startDate, endDate) {
         if (!startDate || !endDate) return null;
-        const start = this.dateToDayNumber(startDate);
-        const end = this.dateToDayNumber(endDate);
+        const start = this._dateToDayNumber(startDate);
+        const end = this._dateToDayNumber(endDate);
         if (start === null || end === null || end < start) return null;
 
         return end - start + 1;
@@ -211,7 +212,7 @@ class RentalFormView {
         const parseDate = new Date(timeStamp);
         if (
             parseDate.getUTCFullYear() !== parseInt(year) ||
-            parseDate.getUTCMonth() + 1 !== parseInt(month) - 1 ||
+            parseDate.getUTCMonth() + 1 !== parseInt(month) ||
             parseDate.getUTCDate() !== parseInt(day)
         ){
             return null;
@@ -221,16 +222,20 @@ class RentalFormView {
 
     }
 
-    showError(fieldName, message) {
+    _showError(fieldName, message) {
         const field = this._form.elements[fieldName];
-        const errorElement = this._form.querySelector(`#${this.getErrorId(fieldName)}-error`);
-        field.setAttribute('aria-invalid', 'true');
-        error.textContent = message;
+        const errorElement = this._form.querySelector(`#${this._getErrorId(fieldName)}`);
+        if (message) {
+            field.setAttribute('aria-invalid', 'true');
+        } else {
+            field.removeAttribute('aria-invalid');
+        }
+        errorElement.textContent = message;
     }
 
     _clearErrors() {
-        [customerName, carId, startDate, endDate, dailyRate].forEach(fieldName => {
-            this.showError(fieldName, '');
+        ['customerName', 'carId', 'startDate', 'endDate', 'dailyRate'].forEach(fieldName => {
+            this._showError(fieldName, '');
         });
     }
 

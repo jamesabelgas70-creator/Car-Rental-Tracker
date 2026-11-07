@@ -15,10 +15,8 @@ const controlAddCar = function (name, dailyRate) {
 };
 
 const controlAddRental = function (rentalData) {
-  const { customerName, carId, startDate, endDate, dailyRate } = rentalData;
-  const rentalDays = model.calculateRentalDays(startDate, endDate);
-  let isValid = true;
-}
+  model.addRental(rentalData);
+};
 
 const init = function () {
   model.loadState();

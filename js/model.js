@@ -20,3 +20,9 @@ export const addCar = function(name, dailyRate) {
     state.cars.push(car);
     saveState();
 }
+
+export const addRental = function(rentalData) {
+    const rental = { id: Date.now(), ...rentalData };
+    state.rentals.push(rental);
+    saveState();
+}
