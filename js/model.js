@@ -445,12 +445,15 @@ export const getSummary = function () {
   const day = today();
   const withStatus = status => state.renters.filter(r => getRenterStatus(r, day) === status);
   const upcoming = withStatus('Upcoming');
+  const carsOut = new Set(withStatus('Active').map(r => r.carId)).size; // each car counts once
   return {
     earnings: state.renters.reduce((sum, r) => sum + r.fee, 0),
     rentals: state.renters.length,
-    carsOut: new Set(withStatus('Active').map(r => r.carId)).size, // each car counts once
+    carsOut,
     fleet: state.cars.length,
+    utilization: state.cars.length ? Math.round((carsOut / state.cars.length) * 100) : 0, // 0 when there are no cars
     upcoming: upcoming.length,
     nextPickup: upcoming.map(r => r.startDate).sort()[0] ?? '',
   };
 };
+
