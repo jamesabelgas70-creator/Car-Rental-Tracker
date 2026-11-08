@@ -7,16 +7,135 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <h1>Car Rental Tracker</h1>
+    <header class="header">
+      <div>
+        <span class="header-pill">Staff Dashboard</span>
+        <h1>Car Rental <span>Tracker</span></h1>
+        <p class="subtitle">Manage rentals, track cars, and keep your fleet in check.</p>
+      </div>
+      <!-- SummaryView.renderDate writes today's date here (date only, no clock) -->
+      <p class="header-date"></p>
+    </header>
 
-    <form class="add-car-form">
-      <input type="text" name="name" placeholder="Car name" />
-      <input type="number" name="dailyRate" placeholder="Daily rate" />
-      <button type="submit">Add car</button>
-      <p class="error"></p>
-    </form>
+    <!-- Desktop: main column (summary + cars) on the left, side column (availability + renters) on the right.
+         Tablet and phone: the side column moves under the main column. -->
+    <main class="layout">
+      <div class="col-main">
+        <!-- SummaryView fills this with the earnings / cars out / upcoming cards -->
+        <section class="summary" aria-label="Summary"></section>
 
-    <ul class="car-list"></ul>
+        <section class="card cars-panel" aria-labelledby="cars-title">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="icon-square">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
+                  <circle cx="7" cy="17" r="2" /><path d="M9 17h6" /><circle cx="17" cy="17" r="2" />
+                </svg>
+              </span>
+              <div>
+                <h2 id="cars-title">Cars</h2>
+                <p class="panel-sub">Manage and view all vehicles</p>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-new-car">+ Add car</button>
+          </div>
+          <ul class="car-list"></ul>
+          <p class="notice">Note: Gas is not included in the rental fee.</p>
+        </section>
+      </div>
+
+      <div class="col-side">
+        <!-- DateFilterView: its dates mark cars as Available or Booked and prefill the renter form -->
+        <section class="card booking-bar" aria-labelledby="booking-title">
+          <div class="booking-head">
+            <span class="icon-square icon-square-glass">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" />
+              </svg>
+            </span>
+            <div>
+              <h2 id="booking-title" class="booking-title">Check Availability</h2>
+              <p class="booking-sub">Pick a date range to check available cars</p>
+            </div>
+          </div>
+
+          <form class="date-filter" novalidate>
+            <div class="date-row">
+              <div class="date-field">
+                <label for="filter-start">Pick-up Date</label>
+                <div class="date-input">
+                  <svg class="date-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" />
+                  </svg>
+                  <input type="date" id="filter-start" name="startDate" />
+                </div>
+                <small class="field-error" aria-live="polite"></small>
+              </div>
+
+              <!-- Thin arrow between the two dates (decoration only) -->
+              <svg class="date-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 12h16M14 6l6 6-6 6" />
+              </svg>
+
+              <div class="date-field">
+                <label for="filter-end">Return Date</label>
+                <div class="date-input">
+                  <svg class="date-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" />
+                  </svg>
+                  <input type="date" id="filter-end" name="endDate" />
+                </div>
+                <small class="field-error" aria-live="polite"></small>
+              </div>
+            </div>
+
+            <!-- Quick ranges. aria-pressed marks the chip that matches the current range. -->
+            <div class="chips" role="group" aria-label="Quick date ranges">
+              <button type="button" class="chip" data-days="2" aria-pressed="false">2 days</button>
+              <button type="button" class="chip" data-days="7" aria-pressed="false">7 days</button>
+              <button type="button" class="chip" data-days="14" aria-pressed="false">14 days</button>
+              <button type="button" class="chip chip-custom" aria-pressed="false">Custom</button>
+            </div>
+
+            <p class="range-summary" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="card renters-panel" aria-labelledby="renters-title">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="icon-square">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>
+              </span>
+              <div>
+                <h2 id="renters-title">Rental Details</h2>
+                <p class="panel-sub">Every renter, latest pick-up first</p>
+              </div>
+            </div>
+          </div>
+          <ul class="renter-list"></ul>
+        </section>
+      </div>
+    </main>
+
+    <!-- CarDetailsView renders one car's details, its renters and Edit / Delete in here -->
+    <dialog class="details-dialog" aria-labelledby="details-title"></dialog>
+
+    <!-- CarFormView renders the add/edit car form in here -->
+    <!-- tabindex="-1": clicking anywhere inside keeps focus in the dialog, so Ctrl+V reaches its paste listener -->
+    <dialog class="car-dialog" aria-labelledby="car-form-title" tabindex="-1"></dialog>
+
+    <!-- RenterFormView renders the add/edit form in here -->
+    <dialog class="renter-dialog" aria-labelledby="renter-form-title"></dialog>
 
     <script type="module" src="js/controller.js"></script>
   </body>

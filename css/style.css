@@ -1,0 +1,1215 @@
+/* ===== 1. Colors in one place: change --blue here to re-theme the whole app ===== */
+:root {
+  --blue: #1f5cf0;
+  --blue-dark: #1747c2;
+  --blue-light: #e8efff;
+  --navy: #0e1b44;
+  --navy-2: #1c3478;
+  --bg: #eef2f9;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --green: #15803d;
+  --green-bg: #dcfce7;
+  --orange: #c2410c;
+  --orange-bg: #ffedd5;
+  --gray-bg: #e5e7eb;
+  --red: #dc2626;
+  --red-dark: #b91c1c;
+  --red-light: #fee2e2;
+  --radius: 16px;
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(30, 64, 175, 0.08); /* soft, blue-tinted */
+}
+
+/* Width includes padding and border, so boxes don't overflow */
+* {
+  box-sizing: border-box;
+}
+
+/* Soft blue-gray page with a very light gradient, system font */
+body {
+  margin: 0;
+  padding: 16px;
+  background: linear-gradient(160deg, #f3f6fc 0%, var(--bg) 45%, #e6ecf8 100%) fixed;
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+}
+
+/* ===== 2. Header, headings, cards and icon squares ===== */
+
+/* Title block on the left, today's date on the right; wraps on phones */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px 24px;
+  margin-bottom: 16px;
+}
+
+/* Small "Staff Dashboard" pill above the title */
+.header-pill {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--blue-light);
+  color: var(--blue-dark);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Big bold title with "Tracker" in blue */
+h1 {
+  margin: 6px 0 0;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+h1 span {
+  color: var(--blue);
+}
+
+/* Small gray line under the title */
+.subtitle {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+/* "Mon, Nov 10, 2026" */
+.header-date {
+  margin: 0;
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* White box with rounded corners and a soft shadow, used by summary and panels */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+/* Panel title (icon square + heading + subtitle) on the left, button on the right */
+.panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Small gray line under a panel title */
+.panel-sub {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* Rounded icon square: light blue by default */
+.icon-square {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--blue-light);
+  color: var(--blue);
+}
+
+/* Solid blue version (summary cards) */
+.icon-square-solid {
+  width: 48px;
+  height: 48px;
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(31, 92, 240, 0.3);
+}
+
+/* See-through version on the navy card */
+.icon-square-glass {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* ===== 3. Summary cards ===== */
+
+/* Three in a row when there is room, stacked on phones */
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+/* Icon square on the left, label / number / note on the right */
+.summary-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+}
+
+.summary-text {
+  min-width: 0;
+}
+
+.summary-label {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.summary-value {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.2;
+  overflow-wrap: anywhere; /* a big total like ₱1,250,000 wraps instead of spilling out of a narrow card */
+}
+
+/* "From 3 rentals", "No active rentals", "Next pick-up: Nov 10" */
+.summary-note {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* ===== 4. Check Availability (the navy card) ===== */
+
+.booking-bar {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(96, 140, 255, 0.3) 0, transparent 55%),
+    linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+  color: #fff;
+}
+
+.booking-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.booking-title {
+  font-size: 1.15rem;
+}
+
+.booking-sub {
+  margin: 0;
+  color: #c7d2fe;
+  font-size: 0.8rem;
+}
+
+/* Phones: pick-up above return */
+.date-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+/* min-width: 0 lets a grid column shrink below the date input's natural width (no overflow at 360px) */
+.date-field {
+  min-width: 0;
+}
+
+/* Light label above each date (high contrast on navy) */
+.date-field label {
+  color: #e2e8f0;
+  font-size: 0.85rem;
+}
+
+/* Holds the calendar icon on top of the input's left side */
+.date-input {
+  position: relative;
+}
+
+/* pointer-events: none lets a click on the icon reach the input underneath */
+.date-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: var(--text);
+  pointer-events: none;
+}
+
+/* White field with large bold date text and room on the left for the icon */
+.date-input input {
+  padding-left: 38px;
+  padding-right: 8px;
+  border-color: transparent;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* Light red reads better than the normal red on navy */
+.booking-bar .field-error {
+  color: #fecaca;
+}
+
+/* Thin arrow between the dates: only shown when they sit side by side */
+.date-arrow {
+  display: none;
+  color: #fff;
+}
+
+/* Tablet and up: pick-up -> return side by side */
+@media (min-width: 768px) {
+  .date-row {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .date-arrow {
+    display: block;
+    margin-top: 36px; /* label height + half the input, so it lines up with the date text */
+  }
+}
+
+/* Four quick chips in a row */
+.chips {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.chip {
+  min-height: 36px;
+  padding: 4px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.chip:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.chip:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* The chip that matches the current range */
+.chip[aria-pressed="true"] {
+  border-color: var(--blue);
+  background: var(--blue);
+}
+
+/* "Nov 8 – Nov 10 · 3 days · 9 of 11 cars available" */
+.range-summary {
+  margin: 12px 0 0;
+  color: #dbe4ff;
+  font-size: 0.85rem;
+}
+
+/* ===== 5. Page layout ===== */
+
+/* Phones and tablets: one column; the side column (availability + renters) sits under the main one */
+.layout,
+.col-main,
+.col-side {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  min-width: 0;
+}
+
+/* Desktop: main column on the left, a fixed-width side column on the right */
+@media (min-width: 1280px) {
+  body {
+    padding: 20px 24px;
+  }
+
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 380px;
+    align-items: start;
+  }
+}
+
+/* Desktop with enough height: the page fits the screen and only the Cars and Rental Details panels
+   scroll, so the header, summary cards and Check Availability stay in view.
+   Shorter windows keep normal page scrolling so the panels never get too small. */
+@media (min-width: 1280px) and (min-height: 640px) {
+  body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .header {
+    flex-shrink: 0;
+  }
+
+  /* The layout takes the space that is left; one row exactly that tall */
+  .layout {
+    flex: 1;
+    min-height: 0;
+    grid-template-rows: minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  /* Each column stacks its two blocks; the panel at the bottom takes the rest and scrolls */
+  .col-main,
+  .col-side {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .summary,
+  .booking-bar {
+    flex-shrink: 0;
+  }
+
+  .cars-panel,
+  .renters-panel {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+}
+
+/* ===== 6. Form fields ===== */
+
+/* All inputs and selects: full width, rounded, same font as the page */
+input,
+select {
+  width: 100%;
+  min-height: 46px; /* same height for every field, including date inputs; big enough to tap */
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+}
+
+/* Blue ring on the field you're typing in */
+input:focus,
+select:focus {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+  border-color: var(--blue);
+}
+
+/* Views set aria-invalid on bad fields, so we give them a red border (and a red focus ring) */
+[aria-invalid="true"] {
+  border-color: var(--red);
+}
+
+[aria-invalid="true"]:focus {
+  outline-color: var(--red);
+}
+
+/* The native calendar button inside date inputs: pointer cursor, a bit softer until hovered */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Labels sit on their own line above the field */
+label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Plates show in capitals while typing (the model also saves them uppercase) */
+.input-plate {
+  text-transform: uppercase;
+}
+
+/* ===== 6b. Photo drop zone (car form) ===== */
+
+/* Centered card with a dashed border. min-height stops the dialog from jumping when the preview appears. */
+.drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 260px;
+  padding: 20px 16px;
+  text-align: center;
+  background: #fff;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+/* Drag-over: blue dashed border and light-blue background */
+.drop-zone.is-dragover {
+  border-color: var(--blue);
+  background: var(--blue-light);
+}
+
+/* Icon, big text and "or", stacked */
+.drop-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* The SVG uses currentColor, so this color paints it */
+.drop-icon {
+  color: #94a3b8;
+}
+
+.drop-text {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* Only one of the two texts shows: normal text, or "Drop the photo to upload" while dragging */
+.drop-text-over,
+.drop-zone.is-dragover .drop-text-normal {
+  display: none;
+}
+
+.drop-zone.is-dragover .drop-text-over {
+  display: inline;
+}
+
+.drop-or {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* Preview is hidden until a photo is chosen; contain shows the whole photo without cropping */
+.photo-preview {
+  display: none;
+  max-width: 100%;
+  max-height: 140px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Filled: the preview replaces the icon, text and "or" */
+.drop-zone.is-filled .drop-empty {
+  display: none;
+}
+
+.drop-zone.is-filled .photo-preview {
+  display: block;
+}
+
+/* Dragging a new photo over a filled zone shows the drop message again instead of the old photo */
+.drop-zone.is-filled.is-dragover .drop-empty {
+  display: flex;
+}
+
+.drop-zone.is-filled.is-dragover .photo-preview {
+  display: none;
+}
+
+/* Outlined light-blue button. The text uses the darker blue so it stays readable (contrast). */
+.btn-browse {
+  background: #fff;
+  color: var(--blue);
+  border: 2px solid #93c5fd;
+  font-weight: 700;
+}
+
+.btn-browse:hover {
+  background: var(--blue-light);
+}
+
+/* Small gray paste hint under the button */
+.drop-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* Hidden from sight but still in the page, so screen readers and the label still reach it
+   (display: none would remove it completely) */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-height: 0; /* undo the 46px min-height that all inputs get */
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===== 7. Buttons ===== */
+
+/* Shared button shape; inline-flex lines up an icon and its text */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.btn svg {
+  flex-shrink: 0;
+}
+
+/* A tiny press-down while clicking */
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Visible outline for keyboard users */
+.btn:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+/* Disabled buttons (booked cars, missing dates) look flat gray and can't be clicked */
+.btn:disabled {
+  cursor: not-allowed;
+}
+
+/* Main action: solid blue */
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--blue-dark);
+}
+
+.btn-primary:disabled {
+  background: var(--border);
+  color: var(--muted);
+}
+
+/* Outlined: View Details, Edit, Close, Cancel */
+.btn-outline,
+.btn-edit {
+  background: #fff;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-outline:hover,
+.btn-edit:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+/* Delete: light red, because it can't be undone */
+.btn-danger {
+  background: var(--red-light);
+  color: var(--red-dark);
+  border-color: #fecaca;
+}
+
+.btn-danger:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.btn-danger:focus-visible {
+  outline-color: var(--red);
+}
+
+/* Smaller buttons on the renter rows */
+.btn-sm {
+  min-height: 34px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+}
+
+/* ===== 8. Badges ===== */
+
+/* Pill-shaped status label with a small dot in front */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Car is free / renter is on the road now */
+.badge-available,
+.badge-active {
+  background: var(--green-bg);
+  color: var(--green);
+}
+
+/* Car is taken for the chosen dates */
+.badge-booked {
+  background: var(--orange-bg);
+  color: var(--orange);
+}
+
+/* Renter's start date is still ahead */
+.badge-upcoming {
+  background: var(--blue-light);
+  color: var(--blue-dark);
+}
+
+/* Renter already gave the car back */
+.badge-returned {
+  background: var(--gray-bg);
+  color: #475569;
+}
+
+/* ===== 9. Car card grid ===== */
+
+/* Remove bullets and indent from both lists */
+.car-list,
+.renter-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Phones: 1 card per row */
+.car-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* Tablets: 2 cards per row */
+@media (min-width: 768px) {
+  .car-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Desktop: 3 cards per row inside the main column */
+@media (min-width: 1280px) {
+  .car-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* One car card: framed photo on top, details below; the border turns blue on hover */
+.car {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.car:hover,
+.car:focus-within {
+  border-color: #b9cbfb;
+  box-shadow: 0 8px 20px rgba(31, 92, 240, 0.1);
+}
+
+/* Holds the photo and the status pill in its top-right corner */
+.car-media {
+  position: relative;
+}
+
+.car-media .badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.1);
+}
+
+/* Fixed shape, so cards don't jump while photos load; soft light background behind the photo */
+.car-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f4f7fd, #e6ecf7);
+}
+
+/* Booked cars are slightly greyed out */
+.car.is-booked .car-photo {
+  filter: grayscale(0.7);
+  opacity: 0.7;
+}
+
+/* Text area grows so the buttons line up at the bottom of every card */
+.car-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  padding: 12px 4px 2px;
+}
+
+.car-name {
+  overflow-wrap: anywhere; /* very long model names wrap instead of widening the card */
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* Car icon, then "Type • Plate" in small gray text */
+.car-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.car-meta svg {
+  flex-shrink: 0;
+}
+
+/* "₱1,500 /day" with the number big and blue */
+.car-rate {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.car-rate strong {
+  color: var(--blue);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+/* "Available again on Nov 14, 2026" under a booked car's price */
+.car-again {
+  margin: 0;
+  color: var(--orange);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* View Details and Rent Now share the width; margin-top: auto pushes them to the bottom of the card */
+.car-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.car-actions .btn {
+  min-width: 0;
+  padding: 8px 6px;
+  font-size: 0.85rem;
+}
+
+/* ===== 10. Renter rows ===== */
+
+.renter-list {
+  display: grid;
+  gap: 12px;
+}
+
+/* One renter: initials circle on the left, details on the right */
+.renter {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* Circle with the renter's initials */
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--blue-light);
+  color: var(--blue-dark);
+  font-weight: 700;
+}
+
+.renter-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Name on the left, status pill on the right */
+.renter-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* Very long renter names wrap instead of pushing the pill off the panel */
+.renter-name {
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+/* Car and dates in small gray text, each with its icon */
+.renter-meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.renter-meta svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* Fee on the left, Edit / Delete on the right; wraps in a narrow panel */
+.renter-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.renter-fee {
+  color: var(--blue);
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.renter-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ===== 10b. Car details dialog ===== */
+
+/* Big photo with the same fixed shape as the cards */
+.details-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f4f7fd, #e6ecf7);
+}
+
+/* Model on the left, status pill on the right; the pill drops below on a narrow screen */
+.details-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 12px;
+}
+
+/* Type, plate and rate side by side */
+.details-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f6f8fc;
+}
+
+.details-facts dt {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.details-facts dd {
+  margin: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.details-rate {
+  color: var(--blue);
+}
+
+.details-subtitle {
+  margin: 16px 0 4px;
+  font-size: 1rem;
+}
+
+/* Read-only list of this car's renters */
+.details-renters {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+}
+
+.details-renters li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+/* The dates under the renter's name */
+.details-renters li > div:first-child span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.details-renters strong {
+  overflow-wrap: anywhere;
+}
+
+/* Status pill above the fee, both on the right */
+.details-renter-end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.details-renter-end .details-fee {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.details-empty {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* The "cannot delete" message sits right above the buttons */
+.details .details-error {
+  margin: 0 0 12px;
+}
+
+/* ===== 11. Dialogs: car details, car form, renter form ===== */
+
+/* Centered white box, never wider or taller than the screen; long forms scroll inside it
+   (e.g. a phone turned sideways) */
+.details-dialog,
+.car-dialog,
+.renter-dialog {
+  width: min(480px, calc(100% - 32px));
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  border: none;
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.details-dialog {
+  width: min(560px, calc(100% - 32px));
+}
+
+/* The car dialog can take focus (for paste) but is not a Tab stop, so no focus ring on it */
+.car-dialog:focus {
+  outline: none;
+}
+
+/* Dimmed see-through layer behind the dialog */
+.details-dialog::backdrop,
+.car-dialog::backdrop,
+.renter-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+/* Smooth open: the dialog fades in and slides up a little, the backdrop fades in */
+.details-dialog[open],
+.car-dialog[open],
+.renter-dialog[open] {
+  animation: dialog-in 0.2s ease-out;
+}
+
+.details-dialog[open]::backdrop,
+.car-dialog[open]::backdrop,
+.renter-dialog[open]::backdrop {
+  animation: fade-in 0.2s ease-out;
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Large tap targets for the dialog buttons */
+.car-form .btn,
+.renter-form .btn {
+  min-height: 46px;
+  padding: 10px 18px;
+}
+
+/* Fields stacked with even spacing */
+.car-form,
+.renter-form {
+  display: grid;
+  gap: 12px;
+}
+
+.car-form h2,
+.renter-form h2 {
+  margin: 0;
+}
+
+/* Start and end date side by side; they stack on narrow phones */
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+/* Cancel and Save on the right */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Live fee preview: light blue box with a blue stripe on the left */
+.renter-total {
+  margin: 0;
+  padding: 12px;
+  background: var(--blue-light);
+  border-left: 4px solid var(--blue);
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.renter-total output {
+  color: var(--blue);
+}
+
+/* ===== 12. Messages and empty state ===== */
+
+/* Red error text directly under its field (or above the details buttons) */
+.error,
+.field-error {
+  margin: 4px 0 0;
+  color: var(--red);
+  font-size: 0.85rem;
+}
+
+/* <small> is inline by default; block puts it on its own line */
+.field-error {
+  display: block;
+}
+
+/* Hide message boxes while they have no text, so they don't leave gaps */
+.error:empty,
+.field-error:empty {
+  display: none;
+}
+
+/* Small gray notes (gas notice, "no dates = today") */
+.notice {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* Inside the dialog the grid gap already spaces it */
+.renter-form .notice {
+  margin: 0;
+}
+
+/* "No cars yet" / "No renters yet" message */
+.empty {
+  grid-column: 1 / -1; /* spans the whole card grid */
+  padding: 16px;
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ===== 13. Reduced motion ===== */
+
+/* People who turn on "reduce motion" in their system settings get no animations or transitions */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after,
+  .details-dialog::backdrop,
+  .car-dialog::backdrop,
+  .renter-dialog::backdrop {
+    animation: none !important;
+    transition: none !important;
+  }
+}
