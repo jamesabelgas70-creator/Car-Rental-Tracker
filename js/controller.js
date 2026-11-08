@@ -26,6 +26,12 @@ const init = function () {
   rentalFormView.render(model.state.cars);
   addCarView.addHandlerAdd(controlAddCar);
   rentalFormView.addHandlerSubmit(controlAddRental);
+  carListView.addHandlerDelete(controlDeleteCar);
+};
+
+const controlDeleteCar = function (id) {
+  model.deleteCar(id);
+  carListView.render(model.state.cars);
 };
 
 init();
