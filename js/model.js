@@ -31,3 +31,4 @@ export const deleteCar  = function(id) {
     state.cars = state.cars.filter(car => car.id !== id);
     saveState();
 }
+
