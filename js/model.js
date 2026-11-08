@@ -26,3 +26,8 @@ export const addRental = function(rentalData) {
     state.rentals.push(rental);
     saveState();
 }
+
+export const deleteCar  = function(id) {
+    state.cars = state.cars.filter(car => car.id !== id);
+    saveState();
+}
