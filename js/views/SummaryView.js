@@ -27,10 +27,11 @@ class SummaryView extends View {
 
   // data = { earnings, rentals, carsOut, fleet, upcoming, nextPickup } from model.getSummary()
   _generateMarkup() {
-    const { earnings, rentals, carsOut, fleet, upcoming, nextPickup } = this._data;
+    const { earnings, rentals, carsOut, fleet, utilization, upcoming, nextPickup } = this._data;
     const cards = [
       ['wallet', 'Total Earnings', formatPeso(earnings), `From ${plural(rentals, 'rental')}`],
       ['car', 'Cars Out Today', carsOut, carsOut === 0 ? 'No active rentals' : `of ${plural(fleet, 'car')} in the fleet`],
+      ['gauge', 'Fleet Utilization', `${utilization}%`, `${plural(carsOut, 'car')} out of ${fleet}`],
       [
         'calendar',
         'Upcoming Renters',
