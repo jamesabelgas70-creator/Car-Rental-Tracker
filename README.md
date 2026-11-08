@@ -11,3 +11,10 @@ Built with plain JavaScript (ES modules) using the Model-View-Controller pattern
 
 ## Live app
 (https://jamesabelgas70-creator.github.io/Car-Rental-Tracker/)
+
+## Features
+- Add, edit and delete cars (with photo upload)
+- Check availability by date range
+- Add, edit and delete renters with a live fee preview
+- Summary cards: total earnings, cars out today, fleet utilization, upcoming renters
+- Data is kept in localStorage and survives a page reload
