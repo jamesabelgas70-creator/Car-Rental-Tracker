@@ -27,10 +27,21 @@ const init = function () {
   addCarView.addHandlerAdd(controlAddCar);
   rentalFormView.addHandlerSubmit(controlAddRental);
   carListView.addHandlerDelete(controlDeleteCar);
+  carListView.addHandlerEdit(controlEditCar);
 };
 
 const controlDeleteCar = function (id) {
   model.deleteCar(id);
+  carListView.render(model.state.cars);
+};
+
+const controlEditCar = function (id, name, dailyRate) {
+  if (!name.trim()) return addCarView.renderError('Please enter a car name.');
+  if (!(dailyRate > 0))
+    return addCarView.renderError('Daily rate must be more than 0.');
+
+  addCarView.renderError('');
+  model.editCar(id, name.trim(), dailyRate);
   carListView.render(model.state.cars);
 };
 
